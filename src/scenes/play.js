@@ -33,14 +33,13 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUIsize, 0, borderUIsize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         //this.add.text(20, 20, "Rocket Patrol Play");
 
-        //add Rocket
-        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUIsize, 'rocket').setOrigin(0.5, 0);
-
         //add spaceship
         this.ship01 = new Spaceship(this, game.config.width + borderUIsize*6, borderUIsize*4, 'spaceship', 0, 30).setOrigin(0.0);
         this.ship02 = new Spaceship(this, game.config.width + borderUIsize*3, borderUIsize*5 +borderPadding*2, 'spaceship', 0, 20).setOrigin(0.0);
         this.ship03 = new Spaceship(this, game.config.width, borderUIsize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0.0);
 
+        //add Rocket
+        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUIsize - borderPadding, 'rocket').setOrigin(0.5, 0);
 
         //define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -86,9 +85,9 @@ class Play extends Phaser.Scene {
         
         // 60-second play clock
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(60000, () => {
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);this.gameOver = true;}, null, this);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);this.gameOver = true;}, null, this);
     }
 
     update() {
@@ -96,6 +95,9 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 4; //update tile sprite
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
+        }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.scene.start("menuScene");
         }
 
         if (!this.gameOver) {               
@@ -111,8 +113,6 @@ class Play extends Phaser.Scene {
             this.ship03.update();
         } 
         
-
-
         if(this.checkCollision(this.p1Rocket, this. ship03)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
@@ -155,5 +155,7 @@ class Play extends Phaser.Scene {
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        this.sound.play('sfx_explosion');
     }
 }
