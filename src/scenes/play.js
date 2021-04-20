@@ -31,7 +31,6 @@ class Play extends Phaser.Scene {
         //beige UI
         this.add.rectangle(0, borderUIsize + borderPadding, game.config.width, borderUIsize * 2, 0xfcf5c7).setOrigin(0, 0);
 
-
         //white borders
         //this.add.rectangle(0, 0, game.config.width, borderUIsize, 0xFFFFFF).setOrigin(0, 0);
         //this.add.rectangle(0, game.config.height - borderUIsize, game.config.width, borderUIsize, 0xFFFFFF).setOrigin(0, 0);
@@ -100,7 +99,7 @@ class Play extends Phaser.Scene {
 
         //display clock time
         this.add.text(borderUIsize + borderPadding*45, borderUIsize + borderPadding*4, 'Time: ', scoreConfig).setOrigin(0.5);
-        this.clockDisplay = this.add.text(borderUIsize + borderPadding*30, borderUIsize + borderPadding*2.2, this.clock, scoreConfig);
+        this.clockDisplay = this.add.text(borderUIsize + borderPadding*30, borderUIsize + borderPadding*2.2, this.game.settings.gameTimer, scoreConfig);
     }
 
     update() {
