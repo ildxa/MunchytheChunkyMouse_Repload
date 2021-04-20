@@ -15,15 +15,9 @@ class Play extends Phaser.Scene {
 
         this.load.image('gameOverBG', './assets/GameOver.png'); //load Game Over backgorund
 
-        this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});    
+        this.load.spritesheet('explosion', './assets/ExplosionSheet.png', {frameWidth: 60, frameHeight: 35, startFrame: 0, endFrame: 9}); //explosion spritesheet
 
-        //load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', {
-            frameWidth: 64,
-            frameWidth: 32,
-            startFrame: 0,
-            endFrame: 9
-        });
+        //this.load.spritesheet('c1shake', './assets/Cheese1SpriteSheet.png', {frameWidth: 64, frameHeight: 45, startFrame:0, endFrame: 5});
     }
 
     create() {
@@ -63,6 +57,7 @@ class Play extends Phaser.Scene {
             }),
             frameRate: 30
         });
+
         // animation config
         this.anims.create({
             key: 'explode',
