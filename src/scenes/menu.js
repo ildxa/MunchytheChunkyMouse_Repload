@@ -7,13 +7,15 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+
+        this.load.image('menu', './assets/Menu.png'); //load backgorund
     }
 
     create() {
-        let menuConfig = {
+        let titleConfig = {
             fontFamily: 'Arial',
-            fontSize: '32px',
-            //backgroundColor: '#CE1600',
+            fontweight: 'bold',
+            fontSize: '36px',
             color: '#FFFFFF',
             align: 'right',
             padding: {
@@ -22,10 +24,24 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+        let menuConfig = {
+            fontFamily: 'Arial',
+            fontSize: '30px',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+            fixedWidth: 0
+        }
+
+        this.menuBG = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'menu').setOrigin(0, 0);
+
         //show menu text
-        this.add.text(game.config.width/2, game.config.height/3 - borderUIsize - borderPadding, 'Munchy the Chunky Mouse', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Use <- -> arrows to move & (F) to fire', menuConfig).setOrigin(0.5); menuConfig.backgroundColor = '#ffee93'; menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUIsize + borderPadding, 'Press <- for Novice or -> for Expert', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/3 - borderUIsize - borderPadding, 'Munchy the Chunky Mouse', titleConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/1.7, 'Use <- -> arrows to move & (F) to fire', menuConfig).setOrigin(0.5); menuConfig.backgroundColor = '#ffee93'; menuConfig.color = '#000';
+        this.add.text(game.config.width/2, game.config.height/2 + borderUIsize*4 + borderPadding, 'Press <- for Novice or -> for Expert', menuConfig).setOrigin(0.5);
         
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);

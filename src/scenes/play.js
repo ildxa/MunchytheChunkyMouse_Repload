@@ -31,21 +31,12 @@ class Play extends Phaser.Scene {
         //beige UI
         this.add.rectangle(0, borderUIsize + borderPadding, game.config.width, borderUIsize * 2, 0xfcf5c7).setOrigin(0, 0);
 
-        //white borders
-        //this.add.rectangle(0, 0, game.config.width, borderUIsize, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.rectangle(0, game.config.height - borderUIsize, game.config.width, borderUIsize, 0xFFFFFF).setOrigin(0, 0);
-        
-        //this.add.rectangle(0, 0, borderUIsize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.rectangle(game.config.width - borderUIsize, 0, borderUIsize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-        //this.add.text(20, 20, "Rocket Patrol Play");
-
         //add cheese x3
         this.ship01 = new Spaceship(this, game.config.width + borderUIsize*6, borderUIsize*4, 'cheese1', 0, 30).setOrigin(0.0);
         this.ship02 = new Spaceship(this, game.config.width + borderUIsize*3, borderUIsize*5 +borderPadding*2, 'cheese3', 0, 20).setOrigin(0.0);
         this.ship03 = new Spaceship(this, game.config.width, borderUIsize*6 + borderPadding*4, 'cheese2', 0, 10).setOrigin(0.0);
 
         //add mouse
-        //this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUIsize - borderPadding, 'rocket').setOrigin(0.5, 0);
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUIsize - borderPadding, 'mouse').setOrigin(0.5, 0);
 
         //define keys
@@ -70,36 +61,57 @@ class Play extends Phaser.Scene {
             frameRate: 30
         });
 
+        let munchConfig = {
+            fontFamily: 'Arial',
+            fontSize: '32px',
+            backgroundColor: '#43aa8b',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+            fixedWidth: 0
+        }
+        //show munch text
+        //this.add.text(game.config.width/2, game.config.height/4.2 - borderUIsize - borderPadding, 'MUNCH', munchConfig).setOrigin(0.5);
+
         // initialize score
         this.p1Score = 0;
+        this.highscore = 0;
+
           // display score
         let scoreConfig = {
             fontFamily: 'Arial',
             fontSize: '28px',
-            //backgroundColor: '#43aa8b',
             color: '#43aa8b',
             align: 'right',
             padding: {
             top: 5,
             bottom: 5,
             },
-            fixedWidth: 100
+            fixedWidth: 0
         }
-        this.add.text(borderUIsize + borderPadding*1.5, borderUIsize + borderPadding*4, 'Score: ', scoreConfig).setOrigin(0.5);
-        this.scoreLeft = this.add.text(borderUIsize + borderPadding, borderUIsize + borderPadding*2.2, this.p1Score, scoreConfig);
+
+        this.add.text(borderUIsize + borderPadding*2, borderUIsize + borderPadding*4, 'Score: ', scoreConfig).setOrigin(0.5);
+        this.scoreLeft = this.add.text(borderUIsize + borderPadding*7.5, borderUIsize + borderPadding*2.2, this.p1Score, scoreConfig);
         
         // GAME OVER flag
         this.gameOver = false;
         
-        // 60-second play clock
+        // play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
         this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);this.gameOver = true;}, null, this);
+        this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 128, 'Highscore: ' + this.highscore, scoreConfig).setOrigin(0.5);
+        this.gameOver = true;}, null, this);
+
+        //add timer countdown
+        this.timeCount = this.add.text(borderUIsize + borderPadding*50, borderUIsize + borderPadding*2.2, '', scoreConfig);
 
         //display clock time
         this.add.text(borderUIsize + borderPadding*45, borderUIsize + borderPadding*4, 'Time: ', scoreConfig).setOrigin(0.5);
-        this.clockDisplay = this.add.text(borderUIsize + borderPadding*30, borderUIsize + borderPadding*2.2, this.game.settings.gameTimer, scoreConfig);
     }
 
     update() {
@@ -112,6 +124,19 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
+        let munchConfig = {
+            fontFamily: 'Arial',
+            fontSize: '32px',
+            backgroundColor: '#43aa8b',
+            color: '#FFFFFF',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+            fixedWidth: 0
+        }
+
         if (!this.gameOver) {               
             this.p1Rocket.update(); //update p1 rocket
             //update spaceship x3
@@ -119,10 +144,12 @@ class Play extends Phaser.Scene {
             this.ship02.update();
             this.ship03.update();
             
-            this.p1Rocket.update();         // update rocket sprite
-            this.ship01.update();           // update spaceships (x3)
+            this.p1Rocket.update();         // update mouse sprite
+            this.ship01.update();           // update cheeses (x3)
             this.ship02.update();
             this.ship03.update();
+
+            this.timeCount.setText((game.settings.gameTimer/1000) - Math.floor(this.clock.getElapsedSeconds())); //countdown clock
         } 
         
         if(this.checkCollision(this.p1Rocket, this. ship03)) {
@@ -164,9 +191,14 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;
             boom.destroy();
         });
+
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        if(this.p1Score > this.highscore) {
+            this.highscore = this.p1Score;
+        }
 
         this.sound.play('sfx_explosion');
     }
