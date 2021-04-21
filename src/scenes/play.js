@@ -1,3 +1,19 @@
+// Ilda Lara Aguilar, 4/20, 10 hours
+
+// Completed Modifications: 
+// - Create a new scrolling tile sprite for the background (5)
+// - Track a high score that persists across scenes and display it in the UI (5)
+// - Implement the 'FIRE' UI text from the original game (5)**
+// - Display the time remaining (in seconds) on the screen (10)
+// - Create a new title screen (e.g., new artwork, typography, layout) (10)
+// - Replace the UI borders with new artwork (10)
+// - Create new artwork for all of the in-game assets (rocket, spaceships, **explosion**) (20)
+// - Create a new *animated* sprite for the Spaceship **(cheese)** enemies (10)**
+// - Implement parallax scrolling (10)
+// - Create 4 new explosion SFX and randomize which one plays on impact (10)
+
+// Received help from: Jamo, Enrico, Jake :D 
+
 class Play extends Phaser.Scene {
     constructor(){
         super("playScene");     
