@@ -10,14 +10,22 @@ class Play extends Phaser.Scene {
         this.load.image('cheese2', './assets/cheese2.png');
         this.load.image('cheese3', './assets/cheese3.png');
 
+        this.load.audio('s1', 'S1.wav'); //eat/munch sounds
+        this.load.audio('s2', 'S2.wav');
+        this.load.audio('s3', 'S3.wav');
+        this.load.audio('s4', 'S4.wav');
+
         
         this.load.image('background', './assets/Background.png'); //load backgorund
 
         this.load.image('gameOverBG', './assets/GameOver.png'); //load Game Over backgorund
 
-        this.load.spritesheet('explosion', './assets/ExplosionSheet.png', {frameWidth: 60, frameHeight: 35, startFrame: 0, endFrame: 9}); //explosion spritesheet
+        this.load.spritesheet('explosion', './assets/ExplosionSheet.png', {frameWidth: 60, frameHeight: 35, startFrame: 0, endFrame: 9}); //heart explosion spritesheet
 
-        //this.load.spritesheet('c1shake', './assets/Cheese1SpriteSheet.png', {frameWidth: 64, frameHeight: 45, startFrame:0, endFrame: 5});
+        this.load.spritesheet('c1wiggle', './assets/Cheese1SpriteSheet.png', {frameWidth: 45, frameHeight: 33, startFrame: 0, endFrame: 8}); //explosion spritesheet
+        this.load.spritesheet('c2spin', './assets/Cheese2SpriteSheet.png', {frameWidth: 35, frameHeight: 35, startFrame: 0, endFrame: 8}); //explosion spritesheet
+        this.load.spritesheet('c3spin', './assets/Cheese3SpriteSheet.png', {frameWidth: 35, frameHeight: 35, startFrame: 0, endFrame: 7}); //explosion spritesheet
+
     }
 
     create() {
@@ -58,12 +66,33 @@ class Play extends Phaser.Scene {
             frameRate: 30
         });
 
-        // animation config
         this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0}),
-            frameRate: 30
+            key: 'c1',
+            frames: this.anims.generateFrameNumbers('c1wiggle', { start: 0, end: 10, first: 0}, true),
+            frameRate: 3,
+            repeat: -1
         });
+
+        this.ship01.anims.play('c1'); 
+
+        this.anims.create({
+            key: 'c2',
+            frames: this.anims.generateFrameNumbers('c2spin', { start: 0, end: 5, first: 0}, true),
+            frameRate: 3,
+            repeat: -1
+        });
+
+        this.ship02.anims.play('c2'); 
+
+        this.anims.create({
+            key: 'c3',
+            frames: this.anims.generateFrameNumbers('c3spin', { start: 0, end: 6, first: 0}, true),
+            frameRate: 3,
+            repeat: -1
+        });
+
+        this.ship03.anims.play('c3'); 
+
 
         let munchConfig = {
             fontFamily: 'Arial',
@@ -77,8 +106,6 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-        //show munch text
-        //this.add.text(game.config.width/2, game.config.height/4.2 - borderUIsize - borderPadding, 'MUNCH', munchConfig).setOrigin(0.5);
 
         // initialize score
         this.p1Score = 0;
@@ -109,6 +136,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+
         this.add.text(borderUIsize + borderPadding*3.5, borderUIsize + borderPadding*4, 'Score: ', scoreConfig).setOrigin(0.5);
         this.scoreLeft = this.add.text(borderUIsize + borderPadding*9.5, borderUIsize + borderPadding*2.2, this.p1Score, scoreConfig);
         
@@ -132,6 +160,8 @@ class Play extends Phaser.Scene {
 
         //display clock time
         this.add.text(borderUIsize + borderPadding*45, borderUIsize + borderPadding*4, 'Time: ', scoreConfig).setOrigin(0.5);
+        
+        this.munchText = this.add.text(game.config.width/2, game.config.height/4.2 - borderUIsize - borderPadding, 'MUNCH', munchConfig).setOrigin(0.5);
     }
 
     update() {
@@ -156,7 +186,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0
         }
-
+        
         if (!this.gameOver) {               
             this.p1Rocket.update(); //update p1 rocket
             //update spaceship x3
@@ -185,6 +215,11 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship01);
         }
 
+        if (this.p1Rocket.isFiring) {
+            this.munchText.setVisible(true);
+        } else {
+            this.munchText.setVisible(false);
+        } 
     }
 
     checkCollision(rocket, ship) {
@@ -220,6 +255,22 @@ class Play extends Phaser.Scene {
             this.highscore = this.p1Score;
         }
 
-        this.sound.play('sfx_explosion');
+        this.sound_sfx = 0; 
+        this.x = Math.floor(Math.random() * 4);
+        this.sound_sfx = this.x; 
+        console.log('sound effect #' + this.sound_sfx)
+
+        if (this.sound_sfx = 1 ) {
+            this.sound.play('s1', { volume: 0.10 });
+        } 
+        if (this.sound_sfx = 2 ) {
+            this.sound.play('s2', { volume: 0.10 });
+        } 
+        if (this.sound_sfx = 3 ) {
+            this.sound.play('s3', { volume: 0.10 });
+        } 
+        if (this.sound_sfx = 4 ) {
+            this.sound.play('s4', { volume: 0.10 });
+        } 
     }
 }
