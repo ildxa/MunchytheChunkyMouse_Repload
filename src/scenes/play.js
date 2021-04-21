@@ -1,6 +1,8 @@
 // Ilda Lara Aguilar, 4/20, 10 hours
 
-// Completed Modifications: 
+// Completed Modifications: 95 points attmepted out of 100 points
+
+
 // - Create a new scrolling tile sprite for the background (5)
 // - Track a high score that persists across scenes and display it in the UI (5)
 // - Implement the 'FIRE' UI text from the original game (5)**
