@@ -4,7 +4,7 @@ class Menu extends Phaser.Scene {
     }
     preload() {
         // load audio
-        this.load.audio('sfx_mouse', './assets/Start.wav');
+        this.load.audio('mouseSound', './assets/Start.wav');
 
         this.load.audio('s1', './assets/S1.wav');
         this.load.audio('s2', './assets/S2.wav');
